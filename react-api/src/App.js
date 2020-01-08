@@ -4,6 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import "./App.css";
+import Cookie from "js-cookie";
 
 function App(props) {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
@@ -15,9 +16,9 @@ function App(props) {
   
   async function onLoad() {
     try {
-      // await Auth.currentSession();
-      // get token from cookie session...
-      userHasAuthenticated(true);
+      if (Cookie.get('token')) {
+        userHasAuthenticated(true);
+      }
     }
     catch(e) {
       if (e !== 'No current user') {
@@ -31,7 +32,7 @@ function App(props) {
   async function handleLogout() {
     // await Auth.signOut();
     // Clear cookie from session store.
-  
+    Cookie.remove("token");
     userHasAuthenticated(false);
     
     props.history.push("/login");

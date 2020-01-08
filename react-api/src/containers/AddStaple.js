@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
 import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
-import config from "../config";
 import "./NewNote.css";
+import config from "../config";
 
 export default function NewNote(props) {
   const file = useRef(null);
@@ -18,6 +18,7 @@ export default function NewNote(props) {
   }
 
   async function handleSubmit(event) {
+    // Call the api to create a staple.
     event.preventDefault();
 
     if (file.current && file.current.size > config.MAX_ATTACHMENT_SIZE) {
@@ -27,8 +28,20 @@ export default function NewNote(props) {
       );
       return;
     }
+    try {
+      await createStaple({ content });
+      props.history.push("/");
+    } catch (e) {
+      alert(e);
+      setIsLoading(false);
+    }
+  }
 
-    setIsLoading(true);
+  function createStaple(staple) {
+    return {"message": "all good"}
+    // return API.post("notes", "/notes", {
+    //   body: note
+    // });
   }
 
   return (
