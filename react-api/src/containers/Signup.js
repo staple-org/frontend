@@ -65,6 +65,7 @@ export default function Signup(props) {
       props.history.push("/");
     } catch (e) {
       alert(e.message);
+    } finally {
       setIsLoading(false);
     }
   }  

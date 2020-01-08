@@ -3,13 +3,14 @@ import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import { useFormFields } from "../libs/hooksLib";
 import "./Login.css";
+import Cookie from "js-cookie";
 
 export default function Login(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
     email: "",
     password: ""
-  });  
+  });
 
   function validateForm() {
     return fields.email.length > 0 && fields.password.length > 0;
@@ -23,6 +24,23 @@ export default function Login(props) {
     try {
       // await Auth.signIn(email, password);
       // fields.email; fields.password --> This is what I will need to pass down the chain.
+      fetch('http://localhost:9998/get-token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: fields.email,
+          password: fields.password,
+        }),
+      }).then((response) => response.json())
+      .then((responseJson) => {
+        // store the token in a cookie.
+        Cookie.set("token", responseJson.token);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
       props.userHasAuthenticated(true);
       props.history.push("/");
       // probably will create a state and store it in state/
@@ -32,6 +50,7 @@ export default function Login(props) {
       setIsLoading(false);
     }
     // If everything worked out fine, we should get back the JWT token and store it for further api calls.
+
   }
 
   return (
