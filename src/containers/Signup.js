@@ -51,6 +51,8 @@ export default function Signup(props) {
         if (response.status === 200) {
           setNewUser(newUser);
           props.userHasAuthenticated(true);
+          // TODO: For now we are skipping the confirmation flow.
+          // Until I get mailgun working.
           props.history.push("/");
         } else {
           alert("Response was: " + response.statusText);
@@ -84,7 +86,7 @@ export default function Signup(props) {
     } finally {
       setIsLoading(false);
     }
-  }  
+  }
 
   function renderConfirmationForm() {
     return (

@@ -1,21 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
+import React, {useEffect, useState} from "react";
+import {ListGroup, ListGroupItem, PageHeader} from "react-bootstrap";
+import {LinkContainer} from "react-router-bootstrap";
 import "./Home.css";
+import config from "../config";
+import Cookie from "js-cookie";
 
 export default function Home(props) {
-  const [notes, setNotes] = useState([]);
+  const [staples, setStaples] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  function renderStapleList(staples) {
-    return [{}].concat(staples).map((staple, i) =>
-      i !== 0 ? (
-        <LinkContainer key={staple.id} to={`/notes/${staple.id}`}>
-          <ListGroupItem header={staple.content.trim().split("\n")[0]}>
-            {"Created: " + new Date(staple.createdAt).toLocaleString()}
+  function renderStapleList(astaples) {
+    let list = undefined;
+    if (astaples.staples) {
+      list = astaples.staples.map(staple => {
+        return (<LinkContainer key={staple.id} to={`/staples/${staple.id}`}>
+          <ListGroupItem header={staple.name} key={staple.id}>
+            {"Created: " + new Date(staple.created_timestamp).toLocaleString()}
           </ListGroupItem>
-        </LinkContainer>
-      ) : (
+        </LinkContainer>)
+      })
+    }
+    return (
+      <div>
+        {list}
         <LinkContainer key="new" to="/staples/new">
           <ListGroupItem>
             <h4>
@@ -23,8 +30,8 @@ export default function Home(props) {
             </h4>
           </ListGroupItem>
         </LinkContainer>
-      )
-    );
+      </div>
+    )
   }
 
   function renderLander() {
@@ -41,7 +48,7 @@ export default function Home(props) {
       <div className="staples">
         <PageHeader>Your Staples</PageHeader>
         <ListGroup>
-          {!isLoading && renderStapleList(notes)}
+          {!isLoading && renderStapleList(staples)}
         </ListGroup>
       </div>
     );
@@ -54,8 +61,15 @@ export default function Home(props) {
       }
 
       try {
-        const notes = await loadStaples();
-        setNotes(notes);
+        fetch(config.HOST+"/rest/api/1/staple", {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + Cookie.get('token'),
+          },
+        }).then(response => response.json())
+          .then(data => setStaples(data))
+          .catch(e => alert(e.message));
       } catch (e) {
         alert(e);
       }
@@ -65,10 +79,6 @@ export default function Home(props) {
 
     onLoad();
   }, [props.isAuthenticated]);
-
-  function loadStaples() {
-    // return API.get("notes", "/notes");
-  }
 
   return (
     <div className="Home">
