@@ -15,7 +15,7 @@ export default function Home(props) {
       list = astaples.staples.map(staple => {
         return (<LinkContainer key={staple.id} to={`/staples/${staple.id}`}>
           <ListGroupItem header={staple.name} key={staple.id}>
-            {"Created: " + new Date(staple.created_timestamp).toLocaleString()}
+            {"Created: " + new Date(staple.created_at).toLocaleString()}
           </ListGroupItem>
         </LinkContainer>)
       })

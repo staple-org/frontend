@@ -33,21 +33,46 @@ export default function Staples(props) {
     onLoad();
   }, [props.match.params.id]);
 
-  async function handleSubmit(event) {
-
-    event.preventDefault();
-
-    // mark as archvied here.
-    // if (file.current && file.current.size > config.MAX_ATTACHMENT_SIZE) {
-    //   alert(
-    //     `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE /
-    //     1000000} MB.`
-    //   );
-    //   return;
-    // }
-
+  async function handleArchive(event) {
     setIsLoading(true);
-    props.history.push('/')
+    event.preventDefault();
+    try {
+      fetch(config.HOST+`/rest/api/1/staple/${props.match.params.id}/archive`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + Cookie.get('token'),
+        },
+      }).then(response => {
+        if (response.ok) {
+          setIsLoading(false);
+          props.history.push('/')
+        }
+      }).catch(e => alert(e.message));
+    } catch (e) {
+      alert(e);
+    }
+  }
+
+  async function handleDelete(event) {
+    setIsDeleting(true);
+    event.preventDefault();
+    try {
+      fetch(config.HOST+`/rest/api/1/staple/${props.match.params.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + Cookie.get('token'),
+        },
+      }).then(response => {
+        if (response.ok) {
+          setIsDeleting(false);
+          props.history.push('/')
+        }
+      }).catch(e => alert(e.message));
+    } catch (e) {
+      alert(e);
+    }
   }
 
   return (
@@ -64,11 +89,20 @@ export default function Staples(props) {
           <LoaderButton
             block
             bsSize="large"
-            bsStyle="danger"
-            onClick={handleSubmit}
-            isLoading={isDeleting}
+            bsStyle="warning"
+            onClick={handleArchive}
+            isLoading={isLoading}
           >
             Archive
+          </LoaderButton>
+          <LoaderButton
+            block
+            bsSize="large"
+            bsStyle="danger"
+            onClick={handleDelete}
+            isLoading={isDeleting}
+          >
+            Delete
           </LoaderButton>
         </form>
       )}

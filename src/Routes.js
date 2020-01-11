@@ -7,6 +7,8 @@ import AppliedRoute from "./components/AppliedRoute";
 import Signup from "./containers/Signup";
 import AddStaple from "./containers/AddStaple";
 import Staples from "./containers/Staples";
+import Settings from "./containers/Settings";
+
 
 export default function Routes({ appProps }) {
   return (
@@ -14,9 +16,9 @@ export default function Routes({ appProps }) {
       <AppliedRoute path="/" exact component={Home} appProps={appProps} />
       <AppliedRoute path="/login" exact component={Login} appProps={appProps} />
       <AppliedRoute path="/signup" exact component={Signup} appProps={appProps} />
-      <AppliedRoute path="/staples" exact component={AddStaple} appProps={appProps} />
-      <AppliedRoute path="/staples/new" exact component={Staples} appProps={appProps} />
+      <AppliedRoute path="/staples/new" exact component={AddStaple} appProps={appProps} />
       <AppliedRoute path="/staples/:id" exact component={Staples} appProps={appProps} />
+      <AppliedRoute path="/settings" exact component={Settings} appProps={appProps} />
       { /* Finally, catch all unmatched routes */ }
       <Route component={NotFound} />
     </Switch>
