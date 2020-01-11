@@ -4,6 +4,7 @@ import LoaderButton from "../components/LoaderButton";
 import { useFormFields } from "../libs/hooksLib";
 import "./Login.css";
 import Cookie from "js-cookie";
+import config from "../config";
 
 export default function Login(props) {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +25,7 @@ export default function Login(props) {
     try {
       // await Auth.signIn(email, password);
       // fields.email; fields.password --> This is what I will need to pass down the chain.
-      fetch('http://localhost:9998/get-token', {
+      fetch(config.HOST+'/get-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

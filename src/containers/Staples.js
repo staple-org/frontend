@@ -1,4 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
+import config from "../config";
+import Cookie from "js-cookie";
 
 export default function Staples(props) {
   const [staple, setStaple] = useState(null);
@@ -6,21 +8,32 @@ export default function Staples(props) {
 
   useEffect(() => {
     function loadStaple() {
-      return API.get("notes", `/notes/${props.match.params.id}`);
-    }
-
-    async function onLoad() {
+      // return API.get("notes", `/notes/${props.match.params.id}`);
       try {
-        const staple = await loadStaple();
-        const { content, attachment } = staple; // array deconstruct
-
-        setContent(content);
-        setStaple(staple);
+        fetch(config.HOST+`/rest/api/1/staple/${props.match.params.id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + Cookie.get('token'),
+          },
+        }).then(response => response.json())
+          .then(data => setStaple(data))
+          .catch(e => alert(e.message));
       } catch (e) {
         alert(e);
       }
     }
 
+    async function onLoad() {
+      try {
+        const staple = await loadStaple();
+        console.log(staple);
+        setContent(staple.content);
+        setStaple(staple);
+      } catch (e) {
+        alert(e);
+      }
+    }
     onLoad();
   }, [props.match.params.id]);
 
