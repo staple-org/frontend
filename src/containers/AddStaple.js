@@ -34,6 +34,9 @@ export default function AddStaple(props) {
         if (response.ok) {
           setIsLoading(false);
           props.history.push("/");
+        } else {
+          setIsLoading(false);
+          alert("Not allowed to create more staples");
         }
       }).catch(e => alert(e.message))
     } catch (e) {

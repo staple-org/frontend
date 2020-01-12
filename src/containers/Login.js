@@ -33,11 +33,16 @@ export default function Login(props) {
           email: fields.email,
           password: fields.password,
         }),
-      }).then((response) => response.json())
-      .then((responseJson) => {
-        // store the token in a cookie.
-        Cookie.set("token", responseJson.token);
-        props.userHasAuthenticated(true);
+      }).then((response) => {
+        if (response.ok) {
+          response.json().then(responseJson => {
+            // store the token in a cookie.
+            Cookie.set("token", responseJson.token);
+            props.userHasAuthenticated(true);
+          })
+        } else {
+          alert("Login failed.")
+        }
       })
       .catch((error) => {
         alert(error.message);

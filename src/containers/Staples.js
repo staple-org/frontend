@@ -85,8 +85,9 @@ export default function Staples(props) {
         <form>
           <FormGroup controlId="content">
             <FormControl
+              // plaintext={content}
+              componentClass="textarea"
               plaintext={content}
-              readOnly
               defaultValue={content}
             />
           </FormGroup>

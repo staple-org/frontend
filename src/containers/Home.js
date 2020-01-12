@@ -1,15 +1,61 @@
 import React, {useEffect, useState} from "react";
-import {ListGroup, ListGroupItem, PageHeader} from "react-bootstrap";
+import {Col, FormControl, FormGroup, Grid, ListGroup, ListGroupItem, PageHeader, Row} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
 import "./Home.css";
 import config from "../config";
 import Cookie from "js-cookie";
+import LoaderButton from "../components/LoaderButton";
 
 export default function Home(props) {
   const [staples, setStaples] = useState([]);
+  const [nextStaple, setNextStaple] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isArchiving, setIsArchiving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  function renderStapleList(astaples) {
+  function handleArchive(event, id) {
+    setIsLoading(true);
+    event.preventDefault();
+    try {
+      fetch(config.HOST+`/rest/api/1/staple/${id}/archive`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + Cookie.get('token'),
+        },
+      }).then(response => {
+        if (response.ok) {
+          setIsArchiving(false);
+          props.history.push('/')
+        }
+      }).catch(e => alert(e.message));
+    } catch (e) {
+      alert(e);
+    }
+  }
+
+  function handleDelete(event, id) {
+    setIsDeleting(true);
+    event.preventDefault();
+    try {
+      fetch(config.HOST+`/rest/api/1/staple/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + Cookie.get('token'),
+        },
+      }).then(response => {
+        if (response.ok) {
+          setIsDeleting(false);
+          props.history.push('/')
+        }
+      }).catch(e => alert(e.message));
+    } catch (e) {
+      alert(e);
+    }
+  }
+
+  function renderStapleView(astaples) {
     let list = undefined;
     if (astaples.staples) {
       list = astaples.staples.map(staple => {
@@ -20,9 +66,52 @@ export default function Home(props) {
         </LinkContainer>)
       })
     }
+    let s = undefined;
+    if (nextStaple.staple) {
+      s = (
+        <div className="Staples">
+          <form>
+            <FormGroup controlId="content">
+              <FormControl
+                plaintext={nextStaple.staple.content}
+                readOnly
+                defaultValue={nextStaple.staple.content}
+              />
+            </FormGroup>
+            <LoaderButton
+              block
+              bsSize="large"
+              bsStyle="warning"
+              onClick={(event) => handleArchive(event, nextStaple.staple.id)}
+              isLoading={isArchiving}
+            >
+              Archive
+            </LoaderButton>
+            <LoaderButton
+              block
+              bsSize="large"
+              bsStyle="danger"
+              onClick={(event) => handleDelete(event, nextStaple.staple.id)}
+              isLoading={isDeleting}
+            >
+              Delete
+            </LoaderButton>
+          </form>
+        </div>
+      )
+    }
     return (
       <div>
-        {list}
+        <Grid>
+          <Row className="show-grid">
+            <Col xs={12} md={8}>
+              {s}
+            </Col>
+            <Col xs={6} md={4}>
+              {list}
+            </Col>
+          </Row>
+        </Grid>
         <LinkContainer key="new" to="/staples/new">
           <ListGroupItem>
             <h4>
@@ -48,7 +137,7 @@ export default function Home(props) {
       <div className="staples">
         <PageHeader>Your Staples</PageHeader>
         <ListGroup>
-          {!isLoading && renderStapleList(staples)}
+          {!isLoading && renderStapleView(staples)}
         </ListGroup>
       </div>
     );
@@ -74,11 +163,25 @@ export default function Home(props) {
         alert(e);
       }
 
+      try {
+        fetch(config.HOST+"/rest/api/1/staple/next", {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + Cookie.get('token'),
+          },
+        }).then(response => response.json())
+          .then(data => setNextStaple(data))
+          .catch(e => alert(e.message));
+      } catch (e) {
+        alert(e);
+      }
+
       setIsLoading(false);
     }
 
     onLoad();
-  }, [props.isAuthenticated]);
+  }, [props.isAuthenticated, isLoading, isDeleting]);
 
   return (
     <div className="Home">
