@@ -18,7 +18,6 @@ export default function Login(props) {
   }
 
   async function handleSubmit(event) {
-    // TODO: Call my API here which will get back a token.
     event.preventDefault();
     setIsLoading(true);
 
@@ -39,7 +38,6 @@ export default function Login(props) {
         // store the token in a cookie.
         Cookie.set("token", responseJson.token);
         props.userHasAuthenticated(true);
-        props.history.push("/");
       })
       .catch((error) => {
         alert(error.message);

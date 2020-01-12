@@ -10,7 +10,7 @@ export default function Settings(props) {
   const [isLoading, setIsLoading] = useState(false);
 
   function handleSubmitClick() {
-
+    setIsLoading(true);
   }
 
   function validateForm() {

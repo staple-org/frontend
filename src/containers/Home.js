@@ -38,7 +38,7 @@ export default function Home(props) {
     return (
       <div className="lander">
         <h1>Staple</h1>
-        <p>A simple note taking app</p>
+        <p>A stack based bookmark.</p>
       </div>
     );
   }

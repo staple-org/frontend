@@ -22,8 +22,12 @@ export default function Staples(props) {
           },
         }).then(response => response.json())
           .then(data => {
-            setContent(data.staple.content);
-            setStaple(data.staple);
+            if (data.staple) {
+              setContent(data.staple.content);
+              setStaple(data.staple);
+            } else {
+              alert(`Staple with id ${props.match.params.id} not found!`);
+            }
           })
           .catch(e => alert(e.message));
       } catch (e) {
