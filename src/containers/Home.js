@@ -71,12 +71,8 @@ export default function Home(props) {
       s = (
         <div className="Staples">
           <form>
-            <FormGroup controlId="content">
-              <FormControl
-                plaintext={nextStaple.staple.content}
-                readOnly
-                defaultValue={nextStaple.staple.content}
-              />
+            <FormGroup controlId="content" className="staple-view">
+              {nextStaple.staple.content}
             </FormGroup>
             <LoaderButton
               block
