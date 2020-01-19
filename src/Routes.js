@@ -9,6 +9,7 @@ import AddStaple from "./containers/AddStaple";
 import Settings from "./containers/Settings";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
+import Archives from "./containers/Archives";
 
 
 export default function Routes({ appProps }) {
@@ -19,6 +20,7 @@ export default function Routes({ appProps }) {
       <UnauthenticatedRoute path="/signup" exact component={Signup} appProps={appProps} />
       <AuthenticatedRoute path="/settings" exact component={Settings} appProps={appProps} />
       <AuthenticatedRoute path="/staples/new" exact component={AddStaple} appProps={appProps} />
+      <AuthenticatedRoute path="/archive" exact component={Archives} appProps={appProps} />
       <Route component={NotFound} />
     </Switch>
   );

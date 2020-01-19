@@ -56,6 +56,9 @@ function App(props) {
                     <LinkContainer to="/settings">
                       <NavItem>Settings</NavItem>
                     </LinkContainer>
+                    <LinkContainer to="/archive">
+                      <NavItem>Archives</NavItem>
+                    </LinkContainer>
                     <NavItem onClick={handleLogout}>Logout</NavItem>
                   </>
                 )
