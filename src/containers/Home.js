@@ -78,18 +78,20 @@ export default function Home(props) {
             <LoaderButton
               block
               bsSize="large"
-              bsStyle="warning"
+              bsStyle="info"
               onClick={(event) => handleArchive(event, nextStaple.staple.id)}
               isLoading={isArchiving}
+              className="archive-button"
             >
               Archive
             </LoaderButton>
             <LoaderButton
               block
               bsSize="large"
-              bsStyle="danger"
+              bsStyle="info"
               onClick={(event) => handleDelete(event, nextStaple.staple.id)}
               isLoading={isDeleting}
+              className="delete-button"
             >
               Delete
             </LoaderButton>

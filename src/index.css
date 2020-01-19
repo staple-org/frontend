@@ -4,7 +4,9 @@ body {
   font-family: "Open Sans", sans-serif;
   font-size: 16px;
   color: #333;
-  background-color: #2F4F4F;
+  /*background-color: slategray;*/
+  background-image: url("background_1.jpg");
+  background-size: cover;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -16,7 +18,7 @@ code {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: "PT Serif", serif;
-  color: #ffff;
+  color: black;
 }
 
 select.form-control,
