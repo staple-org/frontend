@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Col, FormControl, FormGroup, Grid, ListGroup, ListGroupItem, PageHeader, Row} from "react-bootstrap";
+import React, {Fragment, useEffect, useState} from "react";
+import {Col, FormGroup, Grid, ListGroup, ListGroupItem, PageHeader, Row} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
 import "./Home.css";
 import config from "../config";
@@ -59,11 +59,12 @@ export default function Home(props) {
     let list = undefined;
     if (astaples.staples) {
       list = astaples.staples.map(staple => {
-        return (<LinkContainer key={staple.id} to={`/staples/${staple.id}`}>
-          <ListGroupItem header={staple.name} key={staple.id}>
+        return (
+          <div key={staple.id} className="staple-list">
+            <strong>{"Name: " + staple.name}</strong><br/>
             {"Created: " + new Date(staple.created_at).toLocaleString()}
-          </ListGroupItem>
-        </LinkContainer>)
+          </div>
+        )
       })
     }
     let s = undefined;
@@ -72,7 +73,7 @@ export default function Home(props) {
         <div className="Staples">
           <form>
             <FormGroup controlId="content" className="staple-view">
-              {nextStaple.staple.content}
+              <pre>{nextStaple.staple.content}</pre>
             </FormGroup>
             <LoaderButton
               block
@@ -93,6 +94,7 @@ export default function Home(props) {
               Delete
             </LoaderButton>
           </form>
+          <br/>
         </div>
       )
     }
@@ -108,7 +110,7 @@ export default function Home(props) {
             </Col>
           </Row>
         </Grid>
-        <LinkContainer key="new" to="/staples/new">
+        <LinkContainer key="new" to="/staples/new" className="create-container">
           <ListGroupItem>
             <h4>
               <b>{"\uFF0B"}</b> Create a new staple
