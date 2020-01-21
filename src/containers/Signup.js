@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  HelpBlock,
   FormGroup,
   FormControl,
   ControlLabel
@@ -9,13 +8,13 @@ import LoaderButton from "../components/LoaderButton";
 import { useFormFields } from "../libs/hooksLib";
 import "./Signup.css";
 import config from "../config";
+import Cookie from "js-cookie";
 
 export default function Signup(props) {
   const [fields, handleFieldChange] = useFormFields({
     email: "",
     password: "",
     confirmPassword: "",
-    confirmationCode: ""
   });
   const [newUser, setNewUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,8 +27,36 @@ export default function Signup(props) {
     );
   }
 
-  function validateConfirmationForm() {
-    return fields.confirmationCode.length > 0;
+  function getToken() {
+    try {
+      fetch(config.HOST+'/get-token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: fields.email,
+          password: fields.password,
+        }),
+      }).then((response) => {
+        if (response.ok) {
+          response.json().then(responseJson => {
+            // store the token in a cookie.
+            Cookie.set("token", responseJson.token);
+          })
+        } else {
+          alert("Login failed.")
+        }
+      })
+        .catch((error) => {
+          alert(error.message);
+        });
+      // probably will create a state and store it in state/
+    } catch (e) {
+      alert(e.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function handleSubmit(event) {
@@ -49,10 +76,9 @@ export default function Signup(props) {
         }),
       }).then((response) => {
         if (response.status === 200) {
+          getToken();
           setNewUser(newUser);
           props.userHasAuthenticated(true);
-          // TODO: For now we are skipping the confirmation flow.
-          // Until I get mailgun working.
           props.history.push("/");
         } else {
           alert("Response was: " + response.statusText);
@@ -66,52 +92,6 @@ export default function Signup(props) {
     } finally {
       setIsLoading(false);
     }
-  }
-  
-  async function handleConfirmationSubmit(event) {
-    event.preventDefault();
-  
-    setIsLoading(true);
-  
-    try {
-      // await Auth.confirmSignUp(fields.email, fields.confirmationCode);
-      // await Auth.signIn(fields.email, fields.password);
-      // Generate a 6 digit token and send it via email. Store it
-      // and wait for verification.
-
-      props.userHasAuthenticated(true);
-      props.history.push("/");
-    } catch (e) {
-      alert(e.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  function renderConfirmationForm() {
-    return (
-      <form onSubmit={handleConfirmationSubmit}>
-        <FormGroup controlId="confirmationCode" bsSize="large">
-          <ControlLabel>Confirmation Code</ControlLabel>
-          <FormControl
-            autoFocus
-            type="tel"
-            onChange={handleFieldChange}
-            value={fields.confirmationCode}
-          />
-          <HelpBlock>Please check your email for the code.</HelpBlock>
-        </FormGroup>
-        <LoaderButton
-          block
-          type="submit"
-          bsSize="large"
-          isLoading={isLoading}
-          disabled={!validateConfirmationForm()}
-        >
-          Verify
-        </LoaderButton>
-      </form>
-    );
   }
 
   function renderForm() {
@@ -157,7 +137,7 @@ export default function Signup(props) {
 
   return (
     <div className="Signup">
-      {newUser === null ? renderForm() : renderConfirmationForm()}
+      {renderForm()}
     </div>
   );
 }

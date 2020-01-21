@@ -8,7 +8,6 @@ import config from "../config";
 
 export default function Login(props) {
   const [isLoading, setIsLoading] = useState(false);
-  const [isResetting, setIsResetting] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
     email: "",
     password: ""
@@ -57,37 +56,6 @@ export default function Login(props) {
     // If everything worked out fine, we should get back the JWT token and store it for further api calls.
   }
 
-
-  function resetPassword() {
-    setIsResetting(true);
-    try {
-      fetch(config.HOST+"/reset", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: fields.email,
-        }),
-      }).then(response => {
-        if (response.ok) {
-          setIsResetting(false);
-          props.history.push("/login");
-          window.location.reload();
-        } else {
-          setIsResetting(false);
-          alert("Failed to reset password.");
-        }
-      }).catch(e => {
-        alert(e.message);
-        setIsResetting(false)
-      })
-    } catch (e) {
-      alert(e);
-      setIsResetting(false);
-    }
-  }
-
   return (
     <div className="Login">
       <form>
@@ -117,16 +85,6 @@ export default function Login(props) {
           onClick={handleSubmit}
         >
           Login
-        </LoaderButton>
-        <br/>
-        <LoaderButton
-          block
-          type="info"
-          bsSize="large"
-          isLoading={isResetting}
-          onClick={resetPassword}
-        >
-          Reset Password
         </LoaderButton>
       </form>
     </div>

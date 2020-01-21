@@ -69,6 +69,9 @@ function App(props) {
                   <LinkContainer to="/login">
                     <NavItem>Login</NavItem>
                   </LinkContainer>
+                  <LinkContainer to="/reset">
+                    <NavItem>Reset Password</NavItem>
+                  </LinkContainer>
                 </>
             }
           </Nav>
