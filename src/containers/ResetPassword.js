@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import "./ResetPassword.css";
-import {useFormFields} from "../libs/hooksLib";
 import config from "../config";
 import {ControlLabel, FormControl, FormGroup, HelpBlock} from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
