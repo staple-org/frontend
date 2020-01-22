@@ -67,7 +67,7 @@ export default function Settings(props) {
         <Col xs={6} md={4}>
           <form className="ChangePasswordForm" onSubmit={handleChangePasswordSubmit}>
             <FormGroup controlId="password" bsSize="large">
-              <ControlLabel>Password</ControlLabel>
+              <ControlLabel>New password</ControlLabel>
               <FormControl
                 type="password"
                 value={fields.password}
@@ -75,7 +75,7 @@ export default function Settings(props) {
               />
             </FormGroup>
             <FormGroup controlId="confirmPassword" bsSize="large">
-              <ControlLabel>Confirm Password</ControlLabel>
+              <ControlLabel>Confirm new password</ControlLabel>
               <FormControl
                 type="password"
                 onChange={handleFieldChange}
