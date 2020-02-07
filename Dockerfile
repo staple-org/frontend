@@ -6,4 +6,4 @@ RUN mkdir /app
 COPY ./build /app
 
 WORKDIR /app/
-ENTRYPOINT [ "serve -s" ]
+ENTRYPOINT [ "/usr/local/bin/serve -s" ]
