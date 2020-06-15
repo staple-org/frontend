@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { FormGroup, FormControl } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import "./AddStaple.css";
-import config from "../config";
 import Cookie from "js-cookie";
+import config from "../config";
 
 export default function AddStaple(props) {
   const [content, setContent] = useState("");
@@ -20,7 +20,7 @@ export default function AddStaple(props) {
     event.preventDefault();
     setIsLoading(true);
     try {
-      fetch(config.HOST+"/rest/api/1/staple", {
+      fetch(config.DEV_HOST + "/rest/api/1/staple", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,6 +56,8 @@ export default function AddStaple(props) {
             value={content}
             componentClass="textarea"
             onChange={e => setContent(e.target.value)}
+            rows={30}
+            scrolling
           />
         </FormGroup>
         <LoaderButton

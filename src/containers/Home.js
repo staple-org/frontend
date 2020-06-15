@@ -2,9 +2,9 @@ import React, {useEffect, useState} from "react";
 import {Col, FormGroup, Grid, ListGroup, ListGroupItem, PageHeader, Row} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
 import "./Home.css";
-import config from "../config";
 import Cookie from "js-cookie";
 import LoaderButton from "../components/LoaderButton";
+import config from "../config";
 
 export default function Home(props) {
   const [staples, setStaples] = useState([]);
@@ -17,7 +17,7 @@ export default function Home(props) {
     setIsLoading(true);
     event.preventDefault();
     try {
-      fetch(config.HOST+`/rest/api/1/staple/${id}/archive`, {
+      fetch(config.DEV_HOST + `/rest/api/1/staple/${id}/archive`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export default function Home(props) {
     setIsDeleting(true);
     event.preventDefault();
     try {
-      fetch(config.HOST+`/rest/api/1/staple/${id}`, {
+      fetch(config.DEV_HOST + `/rest/api/1/staple/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +73,9 @@ export default function Home(props) {
         <div className="Staples">
           <form>
             <FormGroup controlId="content" className="staple-view">
-              <pre>{nextStaple.staple.content}</pre>
+              <div className="staple-view-div">
+                <pre>{nextStaple.staple.content}</pre>
+              </div>
             </FormGroup>
             <LoaderButton
               block
@@ -127,7 +129,7 @@ export default function Home(props) {
     return (
       <div className="lander">
         <h1>Staple</h1>
-        <p>A stack based bookmark.</p>
+        <p>A queue based bookmark.</p>
       </div>
     );
   }
@@ -150,7 +152,7 @@ export default function Home(props) {
       }
 
       try {
-        fetch(config.HOST+"/rest/api/1/staple", {
+        fetch(config.DEV_HOST + "/rest/api/1/staple", {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -164,7 +166,7 @@ export default function Home(props) {
       }
 
       try {
-        fetch(config.HOST+"/rest/api/1/staple/next", {
+        fetch(config.DEV_HOST + "/rest/api/1/staple/next", {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

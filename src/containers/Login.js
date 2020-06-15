@@ -22,9 +22,7 @@ export default function Login(props) {
     setIsLoading(true);
 
     try {
-      // await Auth.signIn(email, password);
-      // fields.email; fields.password --> This is what I will need to pass down the chain.
-      fetch(config.HOST+'/get-token', {
+      fetch(config.DEV_HOST + '/rest/api/1/get-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

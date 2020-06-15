@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import config from "../config";
 import Cookie from "js-cookie";
 import {FormGroup, Grid, Row, Col, PageHeader, ListGroup} from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import "./Archives.css";
+import config from "../config";
 
 export default function Archives(props) {
   const [staple, setStaple] = useState({});
@@ -11,31 +11,32 @@ export default function Archives(props) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    async function onLoad() {
-      setIsLoading(true);
-      try {
-        fetch(config.HOST+"/rest/api/1/staple/archive", {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + Cookie.get('token'),
-          },
-        }).then(response => response.json())
-          .then(data => setStaples(data))
-          .catch(e => alert(e.message));
-      } catch (e) {
-        alert(e);
-      }
-      setIsLoading(false);
+  async function onLoad() {
+    setIsLoading(true);
+    try {
+      fetch(config.DEV_HOST + "/rest/api/1/staple/archive", {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + Cookie.get('token'),
+        },
+      }).then(response => response.json())
+        .then(data => setStaples(data))
+        .catch(e => alert(e.message));
+    } catch (e) {
+      alert(e);
     }
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
     onLoad();
   }, [props.match.params.id]);
 
   async function handleDelete(id) {
     setIsDeleting(true);
     try {
-      fetch(config.HOST+`/rest/api/1/staple/${id}`, {
+      fetch(config.DEV_HOST + `/rest/api/1/staple/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -45,7 +46,8 @@ export default function Archives(props) {
         if (response.ok) {
           setIsDeleting(false);
           setStaple({});
-          window.location.reload();
+          // window.location.reload();
+          onLoad();
         }
       }).catch(e => alert(e.message));
     } catch (e) {
@@ -57,7 +59,7 @@ export default function Archives(props) {
 
   function fetchStaple(id) {
     try {
-      fetch(config.HOST+`/rest/api/1/staple/${id}`, {
+      fetch(config.DEV_HOST + `/rest/api/1/staple/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +92,9 @@ export default function Archives(props) {
         <div className="Staples">
           <form>
             <FormGroup controlId="content" className="staple-view">
-              <pre>{staple.staple.content}</pre>
+              <div className="staple-view-div">
+                <pre>{staple.staple.content}</pre>
+              </div>
             </FormGroup>
             <LoaderButton
               block

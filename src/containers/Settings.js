@@ -2,8 +2,8 @@ import React, {Fragment, useEffect, useState} from "react";
 import {Col, ControlLabel, FormControl, FormGroup, Grid, Row} from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 import {useFormFields} from "../libs/hooksLib";
-import config from "../config";
 import Cookie from "js-cookie";
+import config from "../config";
 
 export default function Settings(props) {
   const [fields, handleFieldChange] = useFormFields({
@@ -18,7 +18,7 @@ export default function Settings(props) {
     setIsLoading(true);
 
     try {
-      fetch(config.HOST+'/rest/api/1/user/max-staples', {
+      fetch(config.DEV_HOST + '/rest/api/1/user/max-staples', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,7 +30,8 @@ export default function Settings(props) {
       }).then((response) => {
         if (response.status === 200) {
           alert(`New staple count of ${maxStaples} successfully set.`);
-          window.location.reload();
+          // window.location.reload();
+          onLoad();
         } else {
           alert("Response was: " + response.statusText);
         }
@@ -56,7 +57,7 @@ export default function Settings(props) {
     setIsLoading(true);
 
     try {
-      fetch(config.HOST+'/rest/api/1/user/change-password', {
+      fetch(config.DEV_HOST + '/rest/api/1/user/change-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -91,24 +92,24 @@ export default function Settings(props) {
     return true
   }
 
-  useEffect(() => {
-    async function onLoad() {
-      try {
-        fetch(config.HOST+"/rest/api/1/user/max-staples", {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + Cookie.get('token'),
-          },
-        }).then(response => response.json())
-          .then(data => setMaxStaples(data.max_staples))
-          .catch(e => alert(e.message));
-      } catch (e) {
-        alert(e);
-      }
-      setIsLoading(false);
+  async function onLoad() {
+    try {
+      fetch(config.DEV_HOST + "/rest/api/1/user/max-staples", {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + Cookie.get('token'),
+        },
+      }).then(response => response.json())
+        .then(data => setMaxStaples(data.max_staples))
+        .catch(e => alert(e.message));
+    } catch (e) {
+      alert(e);
     }
+    setIsLoading(false);
+  }
 
+  useEffect(() => {
     onLoad();
   }, []);
 
