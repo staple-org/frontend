@@ -6,5 +6,7 @@ RUN mkdir /app
 COPY ./build /app
 COPY .env /app/.env
 
+EXPOSE 5000
+
 WORKDIR /app/
 ENTRYPOINT [ "/usr/local/bin/serve", "-s" ]
